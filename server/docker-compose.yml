@@ -1,0 +1,91 @@
+version: '3.7'
+
+networks:
+  aiticketmanager-network:
+    driver: bridge
+
+services:
+  aiticketmanager-api:
+    build: .
+    volumes:
+      - .:/home/node/api
+    environment:
+      - MONGO_URL=aiticketmanager-mongo
+      - REDIS_URL=aiticketmanager-redis
+    depends_on:
+      - aiticketmanager-mongo
+      - aiticketmanager-redis
+      - aiticketmanager-postgres
+    networks:
+      - aiticketmanager-network
+    links:
+      - aiticketmanager-mongo
+      - aiticketmanager-redis
+      - aiticketmanager-postgres
+    container_name: aiticketmanager-api
+    command: yarn dev
+    ports:
+      - 3333:3333
+
+  aiticketmanager-queue:
+    build: .
+    volumes:
+      - .:/home/node/api
+    environment:
+      - MONGO_URL=aiticketmanager-mongo
+      - REDIS_URL=aiticketmanager-redis
+    depends_on:
+      - aiticketmanager-mongo
+      - aiticketmanager-redis
+      - aiticketmanager-postgres
+    networks:
+      - aiticketmanager-network
+    links:
+      - aiticketmanager-mongo
+      - aiticketmanager-redis
+      - aiticketmanager-postgres
+    container_name: aiticketmanager-queue
+    command: yarn queue
+
+  aiticketmanager-mongo:
+    image: bitnami/mongodb:latest
+    container_name: aiticketmanager-mongo
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - MONGODB_USERNAME=${MONGO_USER}
+      - MONGODB_PASSWORD=${MONGO_PASS}
+      - MONGODB_DATABASE=${MONGO_DB}
+    ports:
+      - '27017:27017'
+    volumes:
+      - /tmp/mongo:/bitnami/mongo/data
+    networks:
+      - aiticketmanager-network
+
+  aiticketmanager-postgres:
+    image: bitnami/postgresql:latest
+    container_name: aiticketmanager-postgres
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    ports:
+      - '5432:5432'
+    volumes:
+      - /tmp/postgres:/bitnami/postgresql/data
+    networks:
+      - aiticketmanager-network
+
+  aiticketmanager-redis:
+    image: bitnami/redis:latest
+    container_name: aiticketmanager-redis
+    restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - REDIS_PASSWORD=${REDIS_PASS}
+    volumes:
+      - /tmp/redis:/bitnami/redis/data
+    networks:
+      - aiticketmanager-network

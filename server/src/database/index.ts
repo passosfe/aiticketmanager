@@ -1,20 +1,23 @@
-import Sequelize from 'sequelize';
+import { createConnection, Connection } from 'typeorm';
+import 'reflect-metadata';
 
-import databaseConfig from '../config/database';
+import databaseConfig from '@config/database';
 
-const models = [];
+const entities = [];
 
 class Database {
+  public connection: Connection;
+
   constructor() {
     this.init();
   }
 
-  init() {
-    this.connection = new Sequelize(databaseConfig);
-
-    models
-      .map(model => model.init(this.connection))
-      .map(model => model.associate && model.associate(this.connection.models));
+  async init(): Promise<void> {
+    this.connection = await createConnection({
+      type: 'postgres',
+      ...databaseConfig,
+      entities,
+    });
   }
 }
 

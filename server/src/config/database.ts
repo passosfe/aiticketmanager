@@ -1,7 +1,6 @@
-require('dotenv/config');
+import 'dotenv/config';
 
-module.exports = {
-  type: process.env.DB_TYPE,
+export default {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   username: process.env.DB_USER,
@@ -9,14 +8,7 @@ module.exports = {
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [
-    'src/app/models/**/*.ts',
-  ],
-  migrations: [
-    'src/database/migrations/**/*.ts',
-  ],
-  subscribers: [
-    'src/subscriber/**/*.ts',
-  ],
-
+  entities: ['src/app/models/**/*.ts'],
+  migrations: ['src/database/migrations/**/*.ts'],
+  subscribers: ['src/subscriber/**/*.ts'],
 };

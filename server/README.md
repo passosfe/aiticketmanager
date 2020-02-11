@@ -15,9 +15,11 @@
 
 [ ] - Utilizar o BrainJS para classificar os emails
 [ ] - Utilizar o Redis como fila dos chamados a serem classificados
+[x] - Utilizar o Docker
 [ ] - Utilizar o Express
 [ ] - Utilizar MongoDB
 [ ] - Utilizar PostgreSQL
+[ ] - Utilizar Typescript
 
 ## Regras de Negócio
 

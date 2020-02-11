@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import * as Yup from 'yup';
 
 class UserController {
   public async index(req: Request, res: Response): Promise<Response> {

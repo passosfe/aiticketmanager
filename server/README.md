@@ -16,12 +16,13 @@
 - [ ] Utilizar o BrainJS para classificar os emails
 - [ ] Utilizar o Redis como fila dos chamados a serem classificados
 - [x] Utilizar o Docker
-- [ ] Utilizar o Express
+- [x] Utilizar o Express
 - [ ] Utilizar MongoDB
-- [ ] Utilizar PostgreSQL
-- [ ] Utilizar Typescript
+- [x] Utilizar PostgreSQL
+- [x] Utilizar Typescript
 
 ## Regras de Negócio
 
 - [ ] Caso a inteligencia artificial nao tiver mais de 80% de certeza quando a categoria, o ticket deve ser categorizado manualmente
 - [ ] Um responsável de suporte somente pode ver os tikets de seu respectivo grupo
+- [ ] Somente adminitradores podem cadastrar novos usuários

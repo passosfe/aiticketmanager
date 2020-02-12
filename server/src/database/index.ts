@@ -13,11 +13,11 @@ class Database {
   }
 
   async init(): Promise<void> {
-    this.connection = await createConnection({
+    this.connection = await createConnection(/* {
       type: 'postgres',
       ...databaseConfig,
       entities,
-    });
+    } */);
   }
 }
 

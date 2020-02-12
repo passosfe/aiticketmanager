@@ -1,4 +1,13 @@
 import {
+  IsNotEmpty,
+  Length,
+  IsEnum,
+  IsOptional,
+  MinLength,
+  IsDate,
+  IsUUID,
+} from 'class-validator';
+import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -6,7 +15,8 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToOne,
+  OneToMany,
+  BaseEntity,
 } from 'typeorm';
 
 import { Category } from './Category';
@@ -14,68 +24,136 @@ import { Comment } from './Comment';
 import { Group } from './Group';
 import { User } from './User';
 
+export enum TicketPriority {
+  HIGH = 1,
+  MEDIUM = 2,
+  LOW = 3,
+}
+
+export enum TicketStatus {
+  UNCATEGORIZED = 'uncategorized',
+  CATEGORIZED = 'categorized',
+  ASSIGNED = 'assigned',
+  ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
+  ON_HOLD = 'on_hold',
+  ANSWERED = 'answered',
+  DONE = 'done',
+}
+
 @Entity('tickets')
-export class Ticket {
+export class Ticket extends BaseEntity {
+  constructor(ticket: Partial<Ticket>) {
+    super();
+    Object.assign(this, ticket);
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { length: 255, nullable: false })
+  @Length(5, 255)
+  @IsNotEmpty()
   title: string;
 
-  @Column('int', { nullable: false })
-  priority: number;
+  @Column('enum', {
+    enum: TicketPriority,
+    nullable: false,
+    default: TicketPriority.MEDIUM,
+  })
+  @IsEnum(TicketPriority)
+  @IsOptional()
+  priority: TicketPriority;
 
-  @Column('varchar', { length: 50, nullable: false })
-  status: string;
+  @Column('enum', {
+    enum: TicketStatus,
+    nullable: false,
+    default: TicketStatus.UNCATEGORIZED,
+  })
+  @IsEnum(TicketStatus)
+  @IsOptional()
+  status: TicketStatus;
 
   @Column('text', { nullable: false })
+  @MinLength(10)
+  @IsNotEmpty()
   description: string;
 
   @Column('text')
+  @MinLength(10)
+  @IsOptional()
   answer: string;
 
   @Column('timestamp')
+  @IsDate()
+  @IsOptional()
   categorized_at: Date;
 
   @Column('timestamp')
+  @IsDate()
+  @IsOptional()
   assigned_at: Date;
 
   @Column('timestamp')
+  @IsDate()
+  @IsOptional()
   answered_at: Date;
 
   @Column('timestamp')
+  @IsDate()
+  @IsOptional()
   solved_at: Date;
 
-  @OneToOne(() => Comment, comment => comment.ticket)
+  @OneToMany(() => Comment, comment => comment.ticket)
   comments: Comment[];
 
   @Column('uuid')
+  @IsUUID()
+  @IsOptional()
   category_id: string;
 
-  @ManyToOne(() => Category, category => category.id)
+  @ManyToOne(() => Category, category => category.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
-  category: Category[];
+  category: Category;
 
   @Column('uuid')
+  @IsUUID()
+  @IsOptional()
   group_id: string;
 
-  @ManyToOne(() => Group, group => group.id)
+  @ManyToOne(() => Group, group => group.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'group_id' })
-  group: Group[];
+  group: Group;
 
   @Column('uuid')
+  @IsUUID()
+  @IsNotEmpty()
   requester_id: string;
 
-  @ManyToOne(() => User, requester => requester.id)
+  @ManyToOne(() => User, requester => requester.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'requester_id' })
-  requester: User[];
+  requester: User;
 
   @Column('uuid')
+  @IsUUID()
+  @IsOptional()
   support_id: string;
 
-  @ManyToOne(() => User, support => support.id)
+  @ManyToOne(() => User, support => support.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'support_id' })
-  support: User[];
+  support: User;
 
   @CreateDateColumn()
   public created_at: Date;

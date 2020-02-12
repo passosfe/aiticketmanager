@@ -1,5 +1,16 @@
 import bcrypt from 'bcryptjs';
 import {
+  Length,
+  IsNotEmpty,
+  IsEmail,
+  IsString,
+  MinLength,
+  IsBoolean,
+  IsOptional,
+  IsDate,
+  IsUUID,
+} from 'class-validator';
+import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
@@ -19,33 +30,53 @@ import { Ticket } from './Ticket';
 
 @Entity('users')
 export class User extends BaseEntity {
+  constructor(user: Partial<User>) {
+    super();
+    Object.assign(this, user);
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { length: 255, nullable: false })
+  @Length(5, 255)
+  @IsNotEmpty()
   name: string;
 
   @Column('varchar', { length: 254, nullable: false, unique: true })
+  @IsEmail()
+  @IsNotEmpty()
   email: string;
 
+  @IsString()
+  @MinLength(6)
   password: string;
 
   @Column('varchar', { length: 60, nullable: false })
   password_hash: string;
 
   @Column('boolean', { default: false })
+  @IsBoolean()
+  @IsOptional()
   is_admin: boolean;
 
   @Column('timestamp')
+  @IsOptional()
+  @IsDate()
   last_login: Date;
 
   @Column('timestamp')
+  @IsOptional()
+  @IsDate()
   deprovisioned_at: Date;
 
   @Column('varchar', { length: 255 })
+  @IsOptional()
   token: string;
 
   @Column('timestamp')
+  @IsOptional()
+  @IsDate()
   token_created_at: Date;
 
   @OneToMany(() => Ticket, ticket => ticket.requester)
@@ -58,9 +89,14 @@ export class User extends BaseEntity {
   comments: Comment[];
 
   @Column('uuid')
+  @IsUUID()
+  @IsNotEmpty()
   group_id: string;
 
-  @ManyToOne(() => Group, group => group.id)
+  @ManyToOne(() => Group, group => group.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'group_id' })
   group: Group;
 

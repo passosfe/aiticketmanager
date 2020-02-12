@@ -1,3 +1,4 @@
+import { Length, IsNotEmpty, IsUUID } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -15,19 +16,31 @@ import { Ticket } from './Ticket';
 
 @Entity('categories')
 export class Category extends BaseEntity {
+  constructor(category: Partial<Category>) {
+    super();
+    Object.assign(this, category);
+  }
+
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar', { length: 255, nullable: false, unique: true })
+  @Column('varchar', { length: 100, nullable: false, unique: true })
+  @Length(5, 100)
+  @IsNotEmpty()
   title: string;
-
-  @Column('uuid')
-  group_id: string;
 
   @OneToMany(() => Ticket, ticket => ticket.category)
   tickets: Ticket[];
 
-  @ManyToOne(() => Group, group => group.id)
+  @Column('uuid')
+  @IsUUID()
+  @IsNotEmpty()
+  group_id: string;
+
+  @ManyToOne(() => Group, group => group.id, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'group_id' })
   group: Group;
 

@@ -1,8 +1,6 @@
 import { createConnection, Connection } from 'typeorm';
 import 'reflect-metadata';
 
-import databaseConfig from '@config/database';
-
 const entities = [];
 
 class Database {

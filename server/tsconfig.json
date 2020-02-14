@@ -18,7 +18,8 @@
     "typeRoots": ["node_modules/@types", "src/@types"],
     "paths": {
       "@config/*": ["config/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@models/*": ["app/models/*"]
     }
   },
   "include": ["src", "__tests__"]

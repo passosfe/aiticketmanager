@@ -56,7 +56,7 @@ export class Ticket extends BaseEntity {
   @IsNotEmpty()
   title: string;
 
-  @Column('enum', {
+  @Column('simple-enum', {
     enum: TicketPriority,
     nullable: false,
     default: TicketPriority.MEDIUM,
@@ -65,7 +65,7 @@ export class Ticket extends BaseEntity {
   @IsOptional()
   priority: TicketPriority;
 
-  @Column('enum', {
+  @Column('simple-enum', {
     enum: TicketStatus,
     nullable: false,
     default: TicketStatus.UNCATEGORIZED,

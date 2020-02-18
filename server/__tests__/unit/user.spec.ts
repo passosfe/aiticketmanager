@@ -1,25 +1,26 @@
 import { Group } from '@models/Group';
 import { User } from '@models/User';
-import bcrypt from 'bcryptjs';
 import { Connection, createConnection } from 'typeorm';
 
-import truncate from '../utils/truncate';
+import DatabaseUtils from '../utils/DatabaseUtils';
 
 describe('User', () => {
   let connection: Connection;
 
   beforeEach(async () => {
     connection = await createConnection();
-    await truncate();
+    await DatabaseUtils.truncate();
   });
 
+  // afterEach(async () => {});
+
   it('should encrypt user password', async () => {
-    const group = Group.create({
+    const group = new Group({
       title: 'test/group',
     });
     await connection.manager.save(group);
 
-    const user = User.create({
+    const user = new User({
       name: 'Felipe Passos',
       email: 'passos.fe@gmail.com',
       password: '123456',
@@ -27,7 +28,7 @@ describe('User', () => {
     });
     await connection.manager.save(user);
 
-    const compareHash = await bcrypt.compare('123456', user.password_hash);
+    const compareHash = await user.checkPassword('123456');
 
     expect(compareHash).toBe(true);
   });

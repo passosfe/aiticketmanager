@@ -6,7 +6,7 @@ import { Ticket } from '@models/Ticket';
 import { User } from '@models/User';
 import { createConnection, Connection } from 'typeorm';
 
-export const entities = [Category, Comment, Group, Ticket, User];
+// export const entities = [Group, Category, User, Ticket, Comment];
 
 class Database {
   public connection: Connection;

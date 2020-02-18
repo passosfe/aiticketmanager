@@ -79,27 +79,27 @@ export class Ticket extends BaseEntity {
   @IsNotEmpty()
   description: string;
 
-  @Column('text')
+  @Column('text', { nullable: true })
   @MinLength(10)
   @IsOptional()
   answer: string;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsDate()
   @IsOptional()
   categorized_at: Date;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsDate()
   @IsOptional()
   assigned_at: Date;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsDate()
   @IsOptional()
   answered_at: Date;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsDate()
   @IsOptional()
   solved_at: Date;
@@ -107,7 +107,7 @@ export class Ticket extends BaseEntity {
   @OneToMany(() => Comment, comment => comment.ticket)
   comments: Comment[];
 
-  @Column('uuid')
+  @Column('uuid', { nullable: true })
   @IsUUID()
   @IsOptional()
   category_id: string;
@@ -119,7 +119,7 @@ export class Ticket extends BaseEntity {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @Column('uuid')
+  @Column('uuid', { nullable: true })
   @IsUUID()
   @IsOptional()
   group_id: string;
@@ -131,7 +131,7 @@ export class Ticket extends BaseEntity {
   @JoinColumn({ name: 'group_id' })
   group: Group;
 
-  @Column('uuid')
+  @Column('uuid', { nullable: false })
   @IsUUID()
   @IsNotEmpty()
   requester_id: string;
@@ -143,7 +143,7 @@ export class Ticket extends BaseEntity {
   @JoinColumn({ name: 'requester_id' })
   requester: User;
 
-  @Column('uuid')
+  @Column('uuid', { nullable: true })
   @IsUUID()
   @IsOptional()
   support_id: string;

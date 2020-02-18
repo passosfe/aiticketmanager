@@ -60,21 +60,21 @@ export class User extends BaseEntity {
   @IsOptional()
   is_admin: boolean;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsOptional()
   @IsDate()
   last_login: Date;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsOptional()
   @IsDate()
   deprovisioned_at: Date;
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true })
   @IsOptional()
   token: string;
 
-  @Column('timestamp')
+  @Column('timestamp', { nullable: true })
   @IsOptional()
   @IsDate()
   token_created_at: Date;
@@ -88,7 +88,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Comment, comment => comment.author)
   comments: Comment[];
 
-  @Column('uuid')
+  @Column('uuid', { nullable: false })
   @IsUUID()
   @IsNotEmpty()
   group_id: string;
@@ -115,7 +115,7 @@ export class User extends BaseEntity {
     }
   }
 
-  checkPassword(password: string): Promise<boolean> {
+  async checkPassword(password: string): Promise<boolean> {
     return bcrypt.compare(password, this.password_hash);
   }
 }

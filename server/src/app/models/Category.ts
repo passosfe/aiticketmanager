@@ -32,7 +32,7 @@ export class Category extends BaseEntity {
   @OneToMany(() => Ticket, ticket => ticket.category)
   tickets: Ticket[];
 
-  @Column('uuid')
+  @Column('uuid', { nullable: false })
   @IsUUID()
   @IsNotEmpty()
   group_id: string;

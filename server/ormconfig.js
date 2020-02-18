@@ -1,5 +1,3 @@
-require('./src/bootstrap');
-
 module.exports = {
   type: process.env.DB_CONNECTION,
   host: process.env.DB_HOST || '',

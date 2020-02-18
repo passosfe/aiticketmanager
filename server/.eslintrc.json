@@ -65,7 +65,10 @@
       "@typescript-eslint/parser": [".ts", ".js"]
     },
     "import/resolver": {
-      "node": true,
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "moduleDirectory": ["node_modules", "src/"]
+      },
       "typescript": {
         "alwaysTryTypes": true
       }

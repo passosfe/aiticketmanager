@@ -2,10 +2,6 @@ import { Request, Response } from 'express';
 import * as Yup from 'yup';
 
 class UserController {
-  public async index(req: Request, res: Response): Promise<Response> {
-    return res.json({ message: 'ok' });
-  }
-
   public async store(req: Request, res: Response): Promise<Response> {
     return res.json({ message: 'ok' });
   }

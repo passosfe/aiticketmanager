@@ -1,9 +1,6 @@
-import './bootstrap';
-
-import Youch from 'youch';
-import 'reflect-metadata';
-import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import express, { Request, Response, NextFunction } from 'express';
+import Youch from 'youch';
 import 'express-async-errors';
 
 import routes from './routes';

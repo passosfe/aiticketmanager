@@ -1,4 +1,7 @@
 node_modules
+.env.test
+.env.production
+.env.development
 .env
 
 tmp/*

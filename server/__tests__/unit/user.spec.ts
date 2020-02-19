@@ -1,24 +1,26 @@
 import { Group } from '@models/Group';
 import { User } from '@models/User';
-import { Connection, createConnection } from 'typeorm';
 
-import DatabaseUtils from '../utils/DatabaseUtils';
+import TestUtils from '../utils/TestUtils';
 
 describe('User', () => {
-  let connection: Connection;
-
-  beforeEach(async () => {
-    connection = await createConnection();
-    await DatabaseUtils.truncate();
+  beforeAll(async () => {
+    await TestUtils.connect();
   });
 
-  // afterEach(async () => {});
+  beforeEach(async () => {
+    await TestUtils.truncate();
+  });
+
+  afterAll(async () => {
+    await TestUtils.disconnect();
+  });
 
   it('should encrypt user password', async () => {
     const group = new Group({
       title: 'test/group',
     });
-    await connection.manager.save(group);
+    await TestUtils.connection.manager.save(group);
 
     const user = new User({
       name: 'Felipe Passos',
@@ -26,7 +28,7 @@ describe('User', () => {
       password: '123456',
       group_id: group.id,
     });
-    await connection.manager.save(user);
+    await TestUtils.connection.manager.save(user);
 
     const compareHash = await user.checkPassword('123456');
 

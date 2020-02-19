@@ -1,5 +1,10 @@
 import cors from 'cors';
-import express, { Request, Response, NextFunction } from 'express';
+import express, {
+  Request,
+  Response,
+  NextFunction,
+  ErrorRequestHandler,
+} from 'express';
 import Youch from 'youch';
 import 'express-async-errors';
 
@@ -31,7 +36,12 @@ class App {
 
   exceptionHandler(): void {
     this.server.use(
-      async (err, req: Request, res: Response, next: NextFunction) => {
+      async (
+        err: ErrorRequestHandler,
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ) => {
         if (process.env.NODE_ENV === 'development') {
           const errors = await new Youch(err, req).toJSON();
 
